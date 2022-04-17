@@ -5,3 +5,18 @@ To execute the client:
 To execute server:
 
 ❯ clear;python3 twitter_server.py   
+
+To start zookeeper:
+
+Terminal 1:
+❯ source /etc/environment
+❯ zookeeper-server-start.sh config/zookeeper.properties   
+
+Terminal 2:
+❯ source /etc/environment
+❯ kafka-server-start.sh config/server.properties 
+
+Todo:
+Learn about:
+->batch size vs windows
+->how window aggregates work

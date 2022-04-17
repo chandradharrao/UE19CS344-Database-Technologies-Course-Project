@@ -31,6 +31,10 @@ def handleRDD(rdd:pyspark.RDD):
             'hashtag'
         ).count().show()
 
+        '''
+        Push this to kafka topic
+        '''
+
 if __name__ == "__main__":
     #spark session
     sc = SparkContext(appName="twitter stream")
