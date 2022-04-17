@@ -2,6 +2,7 @@
 This is a streaming server that will stream the tweets to clients that are connected to it.
 '''
 
+from base64 import encode
 from curses import raw
 import json
 from tweepy import StreamListener
@@ -77,8 +78,13 @@ class StreamHandler(StreamListener):
                 print("----------END------------")
 
                 #send data to the socker
-                data = f"{hashtag},{screen_name},{text}\n"
-                res = self.sendto_socket.send(data.encode())
+                data = {
+                    'hashtag':hashtag,
+                    'screenName':screen_name,
+                    'content':'testing'
+                }
+                payload = str(json.dumps(data)+'\n')
+                res = self.sendto_socket.send(payload.encode())
                 print("bytes sent:",res)
                 return True
         except Exception as e:
