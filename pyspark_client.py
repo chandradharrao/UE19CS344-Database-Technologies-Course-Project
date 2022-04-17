@@ -3,6 +3,7 @@ import pyspark
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
 from pyspark.sql.functions import col, when, explode, arrays_zip, concat, lit
+from pyspark.sql.functions import *
 
 '''
 This is the pyspark client which connects to the twitter streaming server called as "twitter_Server.py" to collect tweets
@@ -16,9 +17,19 @@ counter = {
 def handleRDD(rdd:pyspark.RDD):
     if not rdd.isEmpty():
         df = spark.read.json(rdd,multiLine=True)
-        df.show(truncate=False)
+        # df.show(truncate=False)
 
+        #convert str(timestamps) to timestamp object 
+        df = df.withColumn('timestamp',\
+            to_timestamp('input_timestamp'))
 
+        # df.show(truncate=False)
+        
+        #tumbling window of size 10 seconds
+        windowedCounts = df.groupBy(
+            window('timestamp',"10 seconds","10 seconds"),
+            'hashtag'
+        ).count().show()
 
 if __name__ == "__main__":
     #spark session

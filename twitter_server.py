@@ -4,6 +4,7 @@ This is a streaming server that will stream the tweets to clients that are conne
 
 from base64 import encode
 from curses import raw
+from datetime import datetime
 import json
 from tweepy import StreamListener
 import os
@@ -81,7 +82,8 @@ class StreamHandler(StreamListener):
                 data = {
                     'hashtag':hashtag,
                     'screenName':screen_name,
-                    'content':'testing'
+                    'content':'testing',
+                    'input_timestamp':str(datetime.now())
                 }
                 payload = str(json.dumps(data)+'\n')
                 res = self.sendto_socket.send(payload.encode())
