@@ -4,7 +4,7 @@ This is a streaming server that will stream the tweets to clients that are conne
 
 from curses import raw
 import json
-from multiprocessing.connection import Listener
+from tweepy import StreamListener
 import os
 import socket
 from time import time
@@ -61,9 +61,9 @@ api = tweepy.API(auth)
 
 top5 = ['RamVsYash', 'DelhiRiots', 'sundayvibes', 'jahagirpuri', '#HindusUnderAttackInIndia']
 
-class StreamHandler(Stream):
+class StreamHandler(StreamListener):
     #connect to socket to which we want to send data
-    def __iniit__(self,sock):
+    def __init__(self,sock):
         self.sendto_socket = sock
 
     def on_data(self, raw_data):
@@ -77,19 +77,27 @@ class StreamHandler(Stream):
                 print("----------END------------")
 
                 #send data to the socker
-                self.sendto_socket.send(json.dumps(tweet)).encode('utf-8')
+                data = f"{hashtag},{screen_name},{text}\n"
+                res = self.sendto_socket.send(data.encode())
+                print("bytes sent:",res)
+                return True
         except Exception as e:
             print("[ERROR]:",e)
+        return True
+
+    def if_error(self,status):
+        print(status)
+        return True
 
 def streamTweets(sock):
-    stream = Stream(api.auth,StreamHandler(sock))
-    stream.filter(track=top5)
+    twitter_stream = Stream(auth,StreamHandler(sock))
+    twitter_stream.filter(track=top5)
 
 if __name__ == "__main__":
     #create open socket for a client to connect
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    host = "127.0.0.1"
-    port = 5556
+    host = "localhost"
+    port = 9090
     sock.bind((host,port))
     
     print(f"Listening on port {port}....")

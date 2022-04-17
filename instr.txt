@@ -1,0 +1,7 @@
+To execute the client:
+
+❯ clear;/opt/spark/bin/pyspark < pyspark_client.py  
+
+To execute server:
+
+❯ clear;python3 twitter_server.py   
