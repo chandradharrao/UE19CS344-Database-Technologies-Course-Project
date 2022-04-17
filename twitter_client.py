@@ -1,9 +1,11 @@
+from multiprocessing.connection import Listener
 import os
 from time import time
 import requests
 from dotenv import load_dotenv
 import requests_oauthlib
 import tweepy
+from tweepy import Stream as twitterStream
 
 load_dotenv()
 
@@ -36,14 +38,28 @@ auth.set_access_token(ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
 api = tweepy.API(auth)
 
 #trending hashtags
-top5 = ['' for i in range(5)]
-trend_res = api.get_place_trends(WOEID)[0]['trends']
+# top5 = ['' for i in range(5)]
+# trend_res = api.get_place_trends(WOEID)[0]['trends']
 
-i = 0
-for trend in trend_res:
-    if trend['name'][0]=='#' and isEng(trend['name']):
-        top5[i] = trend['name']
-        i+=1
-        if i>=5:
-            break
-print(top5)
+# i = 0
+# for trend in trend_res:
+#     if trend['name'][0]=='#' and isEng(trend['name']):
+#         top5[i] = trend['name'][1::]
+#         i+=1
+#         if i>=5:
+#             break
+# print(top5)
+
+top5 = ['RamVsYash', 'DelhiRiots', 'sundayvibes', 'jahagirpuri', '#HindusUnderAttackInIndia']
+
+class StreamHandler(twitterStream):
+    #on recieving a tweet
+    def on_status(self, status):
+        print(status.user.screen_name,"tweeted",status.text)
+
+def streamTweets():
+    myStreamHandler = StreamHandler(API_KEY,API_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
+    myStreamHandler.filter(track=top5)
+
+#realtime tweet stream
+streamTweets()
