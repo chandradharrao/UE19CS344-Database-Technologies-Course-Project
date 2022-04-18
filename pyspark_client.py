@@ -1,9 +1,11 @@
+from ensurepip import bootstrap
 from pyspark import SparkContext
 import pyspark
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
-from pyspark.sql.functions import col, when, explode, arrays_zip, concat, lit
 from pyspark.sql.functions import *
+from kafka import KafkaProducer, producer
+from json import dumps
 
 '''
 This is the pyspark client which connects to the twitter streaming server called as "twitter_Server.py" to collect tweets
@@ -29,17 +31,29 @@ def handleRDD(rdd:pyspark.RDD):
         windowedCounts = df.groupBy(
             window('timestamp',"10 seconds","10 seconds"),
             'hashtag'
-        ).count().show()
+        ).count()
 
-        '''
-        Push this to kafka topic
-        '''
+        windowedCounts.show()
+
+        #push to kafka 
+        for row in windowedCounts.collect():
+            #0th col is the topic name
+            topic = row[0]
+            #1th col is the count of tweets in that topic
+            count = row[1]
+
+            #send to the topic the count
+            producer.send(topic,count)
+
 
 if __name__ == "__main__":
     #spark session
     sc = SparkContext(appName="twitter stream")
     spark = SparkSession(sc)
     spark.sparkContext.setLogLevel('ERROR')
+
+    producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+    value_serializer=lambda x: dumps(x).encode('utf-8'))
 
     #spark streaming context
     ssc = StreamingContext(sc,batchDuration=2)
