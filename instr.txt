@@ -1,21 +1,29 @@
-To execute the client:
+To execute the py-spark client:
 
 ❯ clear;/opt/spark/bin/pyspark < pyspark_client.py  
 
-To execute server:
+To execute tweepy server:
 
 ❯ clear;python3 twitter_server.py   
 
-To start zookeeper:
+To start zookeeper,kafka and kafka manager follow the below instructions:
 
-Terminal 1:
-❯ source /etc/environment
-❯ zookeeper-server-start.sh config/zookeeper.properties   
+    Terminal 1: 
+        Move inside the kafka directory
+        ❯ source /etc/environment
+        ❯ zookeeper-server-start.sh config/zookeeper.properties   
 
-Terminal 2:
-❯ source /etc/environment
-❯ kafka-server-start.sh config/server.properties 
-
+    Terminal 2:
+        Move into the kafka directory
+        ❯ source /etc/environment
+        ❯ kafka-server-start.sh config/server.properties 
+    
+    // not compulsory, only for GUI purposes
+    Terminal 3:
+        Move into ~/CMAK-master/target/universal/cmak-3.0.0.6
+        Run:
+            ❯ bin/cmak -Dconfig.file=conf/application.conf -Dhttp.port=8080  
+        On browser,visit 0.0.0.0/8080
 Todo:
 Learn about:
 ->batch size vs windows

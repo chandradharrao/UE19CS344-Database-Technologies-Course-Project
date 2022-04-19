@@ -4,7 +4,7 @@ import pyspark
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
 from pyspark.sql.functions import *
-from kafka import KafkaProducer, producer
+# from kafka import KafkaProducer, producer
 from json import dumps
 
 '''
@@ -33,17 +33,15 @@ def handleRDD(rdd:pyspark.RDD):
             'hashtag'
         ).count()
 
-        windowedCounts.show()
+        # windowedCounts.show()
 
         #push to kafka 
         for row in windowedCounts.collect():
-            #0th col is the topic name
-            topic = row[0]
-            #1th col is the count of tweets in that topic
-            count = row[1]
+            topic,count = row.__getitem__("hashtag").__getitem__("text"),row.__getitem__("count")
+            print(topic,count)
 
             #send to the topic the count
-            producer.send(topic,count)
+            # producer.send(topic,count)
 
 
 if __name__ == "__main__":
@@ -52,8 +50,8 @@ if __name__ == "__main__":
     spark = SparkSession(sc)
     spark.sparkContext.setLogLevel('ERROR')
 
-    producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda x: dumps(x).encode('utf-8'))
+    # producer = KafkaProducer(bootstrap_servers=['localhost:9092'],
+    # value_serializer=lambda x: dumps(x).encode('utf-8'))
 
     #spark streaming context
     ssc = StreamingContext(sc,batchDuration=2)
