@@ -1,4 +1,5 @@
 To execute the py-spark client:
+
 //redirecting it to interpreter
 ❯ clear;/opt/spark/bin/pyspark < pyspark_client.py 
                     OR
@@ -36,6 +37,9 @@ Listing topics in kafka:
 
 List messages in a topic:
 ❯ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+Running Kafka consumer:
+❯ python3 kafka_consumer.py  
 
 Todo:
 Learn about:
