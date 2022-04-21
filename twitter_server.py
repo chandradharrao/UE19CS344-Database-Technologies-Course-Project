@@ -1,19 +1,12 @@
 '''
 This is a streaming server that will stream the tweets to clients that are connected to it.
 '''
-
-from base64 import encode
-from curses import raw
 from datetime import datetime
 import json
 from tweepy import StreamListener
 import os
 import socket
-from time import time
-from tkinter import E
-import requests
 from dotenv import load_dotenv
-import requests_oauthlib
 import tweepy
 from tweepy import Stream
 from tweepy.streaming import Stream
@@ -38,7 +31,7 @@ ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
 ACCESS_TOKEN_SECRET = os.environ.get("ACCESS_TOKEN_SECRET")
 
 #globals
-WOEID=23424848
+WOEID=23424848 #india location
 
 #auth
 print(API_KEY,API_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET)

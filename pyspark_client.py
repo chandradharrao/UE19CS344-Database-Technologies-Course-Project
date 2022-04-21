@@ -1,11 +1,13 @@
-from ensurepip import bootstrap
+# from time import time
 from pyspark import SparkContext
 import pyspark
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
 from pyspark.sql.functions import *
-# from kafka import KafkaProducer, producer
 from json import dumps
+# from kafka import KafkaProducer
+# SparkContext.addFile("")
+from pyspark.sql.functions import lit
 
 '''
 This is the pyspark client which connects to the twitter streaming server called as "twitter_Server.py" to collect tweets
@@ -24,6 +26,7 @@ def handleRDD(rdd:pyspark.RDD):
         #convert str(timestamps) to timestamp object 
         df = df.withColumn('timestamp',\
             to_timestamp('input_timestamp'))
+        df.withColumn("hashtag",lit("testval!!"))
 
         # df.show(truncate=False)
         
@@ -33,15 +36,25 @@ def handleRDD(rdd:pyspark.RDD):
             'hashtag'
         ).count()
 
-        # windowedCounts.show()
+        windowedCounts.show()
+
+        push_df = windowedCounts.selectExpr("count as value").selectExpr("CAST(value as string)")
+        push_df.show()
+
+        push_df\
+            .write\
+                .format('kafka')\
+                    .option('kafka.bootstrap.servers','localhost:9092')\
+                        .option("topic","test")\
+                        .save()
 
         #push to kafka 
         for row in windowedCounts.collect():
             topic,count = row.__getitem__("hashtag").__getitem__("text"),row.__getitem__("count")
             print(topic,count)
 
-            #send to the topic the count
-            # producer.send(topic,count)
+            #send the count to the topic
+            # producer.send(topic,value=count)
 
 
 if __name__ == "__main__":
@@ -62,6 +75,6 @@ if __name__ == "__main__":
     #each rdd has multiple tweets
     dstream.foreachRDD(lambda rdd: handleRDD(rdd))
 
-
     ssc.start()
     ssc.awaitTermination()
+    

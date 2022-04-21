@@ -1,6 +1,9 @@
 To execute the py-spark client:
-
-❯ clear;/opt/spark/bin/pyspark < pyspark_client.py  
+//redirecting it to interpreter
+❯ clear;/opt/spark/bin/pyspark < pyspark_client.py 
+                    OR
+//submitting it
+❯ clear;spark-submit pyspark_client.py  
 
 To execute tweepy server:
 
@@ -24,6 +27,13 @@ To start zookeeper,kafka and kafka manager follow the below instructions:
         Run:
             ❯ bin/cmak -Dconfig.file=conf/application.conf -Dhttp.port=8080  
         On browser,visit 0.0.0.0/8080
+
+Creating topics in kafka:
+❯ kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test
+
+Listing topics in kafka:
+❯ kafka-topics.sh --list --bootstrap-server localhost:9092     
+
 Todo:
 Learn about:
 ->batch size vs windows
