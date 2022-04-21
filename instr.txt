@@ -2,8 +2,8 @@ To execute the py-spark client:
 //redirecting it to interpreter
 ❯ clear;/opt/spark/bin/pyspark < pyspark_client.py 
                     OR
-//submitting it
-❯ clear;spark-submit pyspark_client.py  
+//submitting it with the right version of kafka
+❯ clear;spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.1.2 pyspark_client.py
 
 To execute tweepy server:
 
@@ -33,6 +33,9 @@ Creating topics in kafka:
 
 Listing topics in kafka:
 ❯ kafka-topics.sh --list --bootstrap-server localhost:9092     
+
+List messages in a topic:
+❯ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 
 Todo:
 Learn about:

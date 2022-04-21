@@ -26,7 +26,6 @@ def handleRDD(rdd:pyspark.RDD):
         #convert str(timestamps) to timestamp object 
         df = df.withColumn('timestamp',\
             to_timestamp('input_timestamp'))
-        df.withColumn("hashtag",lit("testval!!"))
 
         # df.show(truncate=False)
         
@@ -41,20 +40,13 @@ def handleRDD(rdd:pyspark.RDD):
         push_df = windowedCounts.selectExpr("count as value").selectExpr("CAST(value as string)")
         push_df.show()
 
+        #push the count to the correct topic
         push_df\
             .write\
                 .format('kafka')\
                     .option('kafka.bootstrap.servers','localhost:9092')\
                         .option("topic","test")\
                         .save()
-
-        #push to kafka 
-        for row in windowedCounts.collect():
-            topic,count = row.__getitem__("hashtag").__getitem__("text"),row.__getitem__("count")
-            print(topic,count)
-
-            #send the count to the topic
-            # producer.send(topic,value=count)
 
 
 if __name__ == "__main__":
