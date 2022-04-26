@@ -22,7 +22,7 @@ To start zookeeper,kafka and kafka manager follow the below instructions:
         ❯ source /etc/environment
         ❯ kafka-server-start.sh config/server.properties 
     
-    // not compulsory, only for GUI purposes
+    -----------------------OPTIONAL----------------------------
     Terminal 3:
         Move into ~/CMAK-master/target/universal/cmak-3.0.0.6
         Run:
@@ -45,3 +45,12 @@ Todo:
 Learn about:
 ->batch size vs windows
 ->how window aggregates work
+
+Here is the problem statement for the project.
+1. Collect twitter feed for 30 minutes with any 5 hash tags.
+2. Ingest into spark.
+3. Use 6 tumbling windows of 5 minutes each.
+4. Aggregate count of each of these hash tags for each of the 5 minute windows.
+5. Publish them as topics into Kafka.
+6. Export topic wise count by window into any db.
+Note: make any assumptions as necessary . Use any language. You cannot use cloud infrastructure.

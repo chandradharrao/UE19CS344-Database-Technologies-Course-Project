@@ -41,9 +41,12 @@ auth.set_access_token(ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
 #api instance
 api = tweepy.API(auth)
 
+#top5 hashtags
+top5 = None
+
 #trending hashtags
 # top5 = ['' for i in range(5)]
-# trend_res = api.get_place_trends(WOEID)[0]['trends']
+# trend_res = api.trends_place(WOEID)[0]['trends']
 
 # i = 0
 # for trend in trend_res:
@@ -54,7 +57,7 @@ api = tweepy.API(auth)
 #             break
 # print(top5)
 
-top5 = ['RamVsYash', 'DelhiRiots', 'sundayvibes', 'jahagirpuri', '#HindusUnderAttackInIndia']
+top5 = ['RCBvsRR', 'EscaypeLiveTrailer', 'TheGrayMan', 'PrashantKishor', 'Karachi']
 
 class StreamHandler(StreamListener):
     #connect to socket to which we want to send data
@@ -73,12 +76,16 @@ class StreamHandler(StreamListener):
 
                 #send data to the socker
                 data = {
-                    'hashtag':hashtag,
+                    'hashtag':hashtag['text'],
                     'screenName':screen_name,
                     'content':'testing',
                     'input_timestamp':str(datetime.now())
                 }
                 payload = str(json.dumps(data)+'\n')
+                '''
+                payload {"hashtag": "TheGrayMan", "screenName": "IamShivaMegaFan", "content": "testing", "input_timestamp": "2022-04-26 22:05:31.314455"}
+                '''
+                print("payload",payload)
                 res = self.sendto_socket.send(payload.encode())
                 print("bytes sent:",res)
                 return True
