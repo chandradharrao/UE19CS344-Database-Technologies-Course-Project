@@ -54,3 +54,6 @@ Here is the problem statement for the project.
 5. Publish them as topics into Kafka.
 6. Export topic wise count by window into any db.
 Note: make any assumptions as necessary . Use any language. You cannot use cloud infrastructure.
+
+|.......|
+         |.....|

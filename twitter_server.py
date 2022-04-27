@@ -81,7 +81,8 @@ class StreamHandler(StreamListener):
                     'content':'testing',
                     'input_timestamp':str(datetime.now())
                 }
-                payload = str(json.dumps(data)+'\n')
+                # payload = str(json.dumps(data)+'\n')
+                payload = str(hashtag['text']+"\n")
                 '''
                 payload {"hashtag": "TheGrayMan", "screenName": "IamShivaMegaFan", "content": "testing", "input_timestamp": "2022-04-26 22:05:31.314455"}
                 '''
