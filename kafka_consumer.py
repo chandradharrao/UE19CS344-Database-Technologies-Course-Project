@@ -1,10 +1,8 @@
-import json
-from pydoc_data.topics import topics
-from kafka import KafkaConsumer
+from confluent_kafka import Consumer
 from pymongo import mongo_client
-from json import loads
 
-topics = ['RCBvsRR', 'EscaypeLiveTrailer', 'TheGrayMan', 'PrashantKishor', 'Karachi']
+# topics = ['RCBvsRR', 'EscaypeLiveTrailer', 'TheGrayMan', 'PrashantKishor', 'Karachi']
+topics = ['TheGrayMan']
 
 try:
     client = mongo_client.MongoClient('localhost',27017)
@@ -15,31 +13,26 @@ try:
 except Exception as e:
     print("[Error1]:",e)
 
-try:
-    #connect consumer to desired kafka topic
-    consumer = KafkaConsumer(
-        topics,
-        bootstrap_servers=['localhost:9092'],
-        auto_offset_reset='earliest',
-        enable_auto_commit=True,
-        group_id='tweets_consumer',
-        value_deserializer=lambda x:loads(x.decode("utf-8"))
-    )
+#connect consumer to desired kafka topic
+conf = {'bootstrap.servers': "localhost:9092",
+        'group.id': "tweet_consumer",
+        'enable.auto.commit':True,
+        'auto.offset.reset': 'earliest'}
 
-except Exception as e:
-    print('[ERROR2]:',e)
-
-# try:
-#     for record in consumer:
-
-#         db_rec = {'topic':'test','count':record}
-#         rec_id = collection.insert_one(db_rec)
-#         print(f"Data inserted into mongodb with id<{rec_id}>")
-# except Exception as e:
-#     print('ERROR3',e)
+consumer = Consumer(conf)
+consumer.subscribe(topics)
 
 while True:
-    msg = consumer.poll(1.0)
+    msg = consumer.poll(timeout=1.0)
+    try:
+        if msg!=None:
+            print("message",msg.topic(),int(msg.value().decode('utf-8')))
+            db_rec = {'topic':msg.topic(),'count':int(msg.value().decode('utf-8'))}
+            rec_id = collection.insert_one(db_rec)
+            print(f"Data inserted into mongodb with id<{rec_id}>")
+        else:
+            print("EMpty message from kafka...")
+    except Exception as e:
+        print("[ERROR]",e)
 
-    db_rec = {'topic':msg.topic(),'count':}
-    rec_id = collection.insert_one(db_rec)
+

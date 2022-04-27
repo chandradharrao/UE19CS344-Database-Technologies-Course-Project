@@ -38,6 +38,9 @@ Listing topics in kafka:
 List messages in a topic:
 ❯ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 
+Producing messages into a kafak topic:
+❯ clear;kafka-console-producer.sh --bootstrap-server localhost:9092 --topic <topic_name>
+
 Running Kafka consumer:
 ❯ python3 kafka_consumer.py  
 
@@ -56,4 +59,4 @@ Here is the problem statement for the project.
 Note: make any assumptions as necessary . Use any language. You cannot use cloud infrastructure.
 
 |.......|
-         |.....|
+         |.......|

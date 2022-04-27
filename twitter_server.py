@@ -75,18 +75,9 @@ class StreamHandler(StreamListener):
                 print("----------END------------")
 
                 #send data to the socker
-                data = {
-                    'hashtag':hashtag['text'],
-                    'screenName':screen_name,
-                    'content':'testing',
-                    'input_timestamp':str(datetime.now())
-                }
-                # payload = str(json.dumps(data)+'\n')
                 payload = str(hashtag['text']+"\n")
-                '''
-                payload {"hashtag": "TheGrayMan", "screenName": "IamShivaMegaFan", "content": "testing", "input_timestamp": "2022-04-26 22:05:31.314455"}
-                '''
                 print("payload",payload)
+                
                 res = self.sendto_socket.send(payload.encode())
                 print("bytes sent:",res)
                 return True
