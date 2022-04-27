@@ -9,7 +9,7 @@ from pyspark.sql.functions import lit
 This is the pyspark client which connects to the twitter streaming server called as "twitter_Server.py" to collect tweets
 '''
 
-topics = ['RCBvsRR', 'EscaypeLiveTrailer', 'TheGrayMan', 'PrashantKishor', 'Karachi']
+topics = ['JohnyDepp', 'ElonMusk', 'KGF', 'PrashantKishor', 'Karachi']
 
 def saveRDD(rdd:pyspark.RDD):
     df = rdd.toDF()
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     dstream = ssc.socketTextStream("localhost",9090)
 
     #each rdd has multiple tweets
-    dstream.window(60,60).map(lambda x: (x,1)).reduceByKey(lambda x,y: x+y).foreachRDD(lambda rdd: saveRDD(rdd))
+    dstream.window(30,30).map(lambda x: (x,1)).reduceByKey(lambda x,y: x+y).foreachRDD(lambda rdd: saveRDD(rdd))
 
     ssc.start()
     ssc.awaitTermination()

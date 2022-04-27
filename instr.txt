@@ -41,7 +41,7 @@ List messages in a topic:
 Producing messages into a kafak topic:
 ❯ clear;kafka-console-producer.sh --bootstrap-server localhost:9092 --topic <topic_name>
 
-Running Kafka consumer:
+Running Kafka consumer:sour
 ❯ python3 kafka_consumer.py  
 
 Todo:

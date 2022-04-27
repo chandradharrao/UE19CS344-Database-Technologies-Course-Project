@@ -3,13 +3,14 @@ from pymongo import mongo_client
 import pymongo
 from bson.objectid import ObjectId
 
-topics = ['RCBvsRR', 'EscaypeLiveTrailer', 'TheGrayMan', 'PrashantKishor', 'Karachi']
+topics = ['JohnyDepp', 'ElonMusk', 'KGF', 'PrashantKishor', 'Karachi']
+
 # topics = ['TheGrayMan']
 
 try:
     client = mongo_client.MongoClient('localhost',27017)
-    db = client['test_1']
-    collection = db['test_1']
+    db = client['test_2']
+    collection = db['test_2']
     print("Connection successful!")
         
 except Exception as e:
