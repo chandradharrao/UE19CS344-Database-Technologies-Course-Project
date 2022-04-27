@@ -43,7 +43,7 @@ if __name__ == "__main__":
     dstream = ssc.socketTextStream("localhost",9090)
 
     #each rdd has multiple tweets
-    dstream.window(10,10).map(lambda x: (x,1)).reduceByKey(lambda x,y: x+y).foreachRDD(lambda rdd: saveRDD(rdd))
+    dstream.window(60,60).map(lambda x: (x,1)).reduceByKey(lambda x,y: x+y).foreachRDD(lambda rdd: saveRDD(rdd))
 
     ssc.start()
     ssc.awaitTermination()
